@@ -1,0 +1,2434 @@
+Terminals unused in grammar
+
+    FOR
+    LOOP
+    RETURN
+    BREAK
+    ARROW
+    IN
+    DOTDOT
+    IDENT
+    LOWER_THAN_ASSIGN
+    LOWER_THAN_ELSE
+    IFX
+
+
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: GlobalStatementList
+
+    2 GlobalStatementList: GlobalStatementList GlobalStatement
+    3                    | GlobalStatement
+
+    4 GlobalStatement: FunctionDeclStmt
+    5                | NEWLINE
+
+    6 $@1: ε
+
+    7 FunctionDeclStmt: FUNC ID '(' ')' $@1 Block
+
+    8 StatementList: ε
+    9              | StatementList Statement
+
+   10 Statement: VarDeclStmt
+   11          | AssignmentStmt
+   12          | IfStmt
+   13          | WhileStmt
+   14          | PrintStmt
+   15          | PrintlnStmt
+   16          | Block
+   17          | ExpressionStmt
+
+   18 Type: INT
+   19     | FLOAT
+   20     | STR
+   21     | '&' STR
+   22     | BOOL
+   23     | '[' Type ';' INT_LIT ']'
+
+   24 VarDeclStmt: LET ID '=' Expression ';'
+   25            | LET ID ':' Type '=' Expression ';'
+   26            | LET ID ':' Type ';'
+   27            | LET MUT ID ':' Type '=' Expression ';'
+   28            | LET MUT ID ':' Type ';'
+   29            | LET MUT ID '=' Expression ';'
+
+   30 AssignmentStmt: ID '=' Expression ';'
+   31               | ID ADD_ASSIGN Expression ';'
+   32               | ID SUB_ASSIGN Expression ';'
+   33               | ID MUL_ASSIGN Expression ';'
+   34               | ID DIV_ASSIGN Expression ';'
+   35               | ID REM_ASSIGN Expression ';'
+
+   36 @2: ε
+
+   37 IfStmt: IF RelExprJump @2 Block OptElse
+
+   38 OptElse: ELSE Block
+   39        | ε
+
+   40 RelExprJump: AddExpr '>' AddExpr
+   41            | AddExpr '<' AddExpr
+   42            | AddExpr EQL AddExpr
+   43            | AddExpr NEQ AddExpr
+   44            | AddExpr GEQ AddExpr
+   45            | AddExpr LEQ AddExpr
+
+   46 WhileStmt: WHILE Expression Block
+
+   47 PrintStmt: PRINT Expression ';'
+
+   48 PrintlnStmt: PRINTLN Expression ';'
+
+   49 $@3: ε
+
+   50 Block: '{' $@3 StatementList '}'
+
+   51 ExpressionList: Expression
+   52               | ExpressionList ',' Expression
+
+   53 ExpressionStmt: Expression ';'
+
+   54 Expression: OrExpr
+
+   55 OrExpr: OrExpr LOR AndExpr
+   56       | AndExpr
+
+   57 AndExpr: AndExpr LAND RelExpr
+   58        | RelExpr
+
+   59 RelExpr: AddExpr '>' AddExpr
+   60        | AddExpr '<' AddExpr
+   61        | AddExpr EQL AddExpr
+   62        | AddExpr NEQ AddExpr
+   63        | AddExpr LSHIFT AddExpr
+   64        | AddExpr RSHIFT AddExpr
+   65        | AddExpr
+
+   66 AddExpr: AddExpr '+' MulExpr
+   67        | AddExpr '-' MulExpr
+   68        | MulExpr
+
+   69 MulExpr: MulExpr '*' UnaryExpr
+   70        | MulExpr '/' UnaryExpr
+   71        | MulExpr '%' UnaryExpr
+   72        | AsExpr
+
+   73 AsExpr: UnaryExpr AS Type
+   74       | UnaryExpr
+
+   75 UnaryExpr: '-' UnaryExpr
+   76          | '!' UnaryExpr
+   77          | Primary
+
+   78 Primary: '"' STRING_LIT '"'
+   79        | '"' '"'
+   80        | INT_LIT
+   81        | FLOAT_LIT
+   82        | TRUE
+   83        | FALSE
+   84        | ID
+   85        | ArrayIndexExpr
+   86        | '[' ExpressionList ']'
+   87        | '(' Expression ')'
+
+   88 ArrayIndexExpr: ID '[' INT_LIT ']'
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '!' (33) 76
+    '"' (34) 78 79
+    '%' (37) 71
+    '&' (38) 21
+    '(' (40) 7 87
+    ')' (41) 7 87
+    '*' (42) 69
+    '+' (43) 66
+    ',' (44) 52
+    '-' (45) 67 75
+    '/' (47) 70
+    ':' (58) 25 26 27 28
+    ';' (59) 23 24 25 26 27 28 29 30 31 32 33 34 35 47 48 53
+    '<' (60) 41 60
+    '=' (61) 24 25 27 29 30
+    '>' (62) 40 59
+    '[' (91) 23 86 88
+    ']' (93) 23 86 88
+    '{' (123) 50
+    '}' (125) 50
+    error (256)
+    LET (258) 24 25 26 27 28 29
+    MUT (259) 27 28 29
+    NEWLINE (260) 5
+    INT (261) 18
+    FLOAT (262) 19
+    BOOL (263) 22
+    STR (264) 20 21
+    TRUE (265) 82
+    FALSE (266) 83
+    GEQ (267) 44
+    LEQ (268) 45
+    EQL (269) 42 61
+    NEQ (270) 43 62
+    LOR (271) 55
+    LAND (272) 57
+    ADD_ASSIGN (273) 31
+    SUB_ASSIGN (274) 32
+    MUL_ASSIGN (275) 33
+    DIV_ASSIGN (276) 34
+    REM_ASSIGN (277) 35
+    IF (278) 37
+    ELSE (279) 38
+    FOR (280)
+    WHILE (281) 46
+    LOOP (282)
+    PRINT (283) 47
+    PRINTLN (284) 48
+    FUNC (285) 7
+    RETURN (286)
+    BREAK (287)
+    ARROW (288)
+    AS (289) 73
+    IN (290)
+    DOTDOT (291)
+    RSHIFT (292) 64
+    LSHIFT (293) 63
+    INT_LIT <i_val> (294) 23 80 88
+    FLOAT_LIT <f_val> (295) 81
+    STRING_LIT <s_val> (296) 78
+    IDENT <s_val> (297)
+    ID <s_val> (298) 7 24 25 26 27 28 29 30 31 32 33 34 35 84 88
+    LOWER_THAN_ASSIGN (299)
+    LOWER_THAN_ELSE (300)
+    IFX (301)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (67)
+        on left: 0
+    Program (68)
+        on left: 1
+        on right: 0
+    GlobalStatementList (69)
+        on left: 2 3
+        on right: 1 2
+    GlobalStatement (70)
+        on left: 4 5
+        on right: 2 3
+    FunctionDeclStmt (71)
+        on left: 7
+        on right: 4
+    $@1 (72)
+        on left: 6
+        on right: 7
+    StatementList (73)
+        on left: 8 9
+        on right: 9 50
+    Statement (74)
+        on left: 10 11 12 13 14 15 16 17
+        on right: 9
+    Type <s_val> (75)
+        on left: 18 19 20 21 22 23
+        on right: 23 25 26 27 28 73
+    VarDeclStmt <type> (76)
+        on left: 24 25 26 27 28 29
+        on right: 10
+    AssignmentStmt (77)
+        on left: 30 31 32 33 34 35
+        on right: 11
+    IfStmt <i_val> (78)
+        on left: 37
+        on right: 12
+    @2 (79)
+        on left: 36
+        on right: 37
+    OptElse <i_val> (80)
+        on left: 38 39
+        on right: 37
+    RelExprJump <i_val> (81)
+        on left: 40 41 42 43 44 45
+        on right: 37
+    WhileStmt (82)
+        on left: 46
+        on right: 13
+    PrintStmt <type> (83)
+        on left: 47
+        on right: 14
+    PrintlnStmt <type> (84)
+        on left: 48
+        on right: 15
+    Block (85)
+        on left: 50
+        on right: 7 16 37 38 46
+    $@3 (86)
+        on left: 49
+        on right: 50
+    ExpressionList <type> (87)
+        on left: 51 52
+        on right: 52 86
+    ExpressionStmt (88)
+        on left: 53
+        on right: 17
+    Expression <type> (89)
+        on left: 54
+        on right: 24 25 27 29 30 31 32 33 34 35 46 47 48 51 52 53 87
+    OrExpr <type> (90)
+        on left: 55 56
+        on right: 54 55
+    AndExpr <type> (91)
+        on left: 57 58
+        on right: 55 56 57
+    RelExpr <type> (92)
+        on left: 59 60 61 62 63 64 65
+        on right: 57 58
+    AddExpr <type> (93)
+        on left: 66 67 68
+        on right: 40 41 42 43 44 45 59 60 61 62 63 64 65 66 67
+    MulExpr <type> (94)
+        on left: 69 70 71 72
+        on right: 66 67 68 69 70 71
+    AsExpr <type> (95)
+        on left: 73 74
+        on right: 72
+    UnaryExpr <type> (96)
+        on left: 75 76 77
+        on right: 69 70 71 73 74 75 76
+    Primary <type> (97)
+        on left: 78 79 80 81 82 83 84 85 86 87
+        on right: 77
+    ArrayIndexExpr <type> (98)
+        on left: 88
+        on right: 85
+
+
+State 0
+
+    0 $accept: • Program $end
+
+    NEWLINE  shift, and go to state 1
+    FUNC     shift, and go to state 2
+
+    Program              go to state 3
+    GlobalStatementList  go to state 4
+    GlobalStatement      go to state 5
+    FunctionDeclStmt     go to state 6
+
+
+State 1
+
+    5 GlobalStatement: NEWLINE •
+
+    $default  reduce using rule 5 (GlobalStatement)
+
+
+State 2
+
+    7 FunctionDeclStmt: FUNC • ID '(' ')' $@1 Block
+
+    ID  shift, and go to state 7
+
+
+State 3
+
+    0 $accept: Program • $end
+
+    $end  shift, and go to state 8
+
+
+State 4
+
+    1 Program: GlobalStatementList •
+    2 GlobalStatementList: GlobalStatementList • GlobalStatement
+
+    NEWLINE  shift, and go to state 1
+    FUNC     shift, and go to state 2
+
+    $default  reduce using rule 1 (Program)
+
+    GlobalStatement   go to state 9
+    FunctionDeclStmt  go to state 6
+
+
+State 5
+
+    3 GlobalStatementList: GlobalStatement •
+
+    $default  reduce using rule 3 (GlobalStatementList)
+
+
+State 6
+
+    4 GlobalStatement: FunctionDeclStmt •
+
+    $default  reduce using rule 4 (GlobalStatement)
+
+
+State 7
+
+    7 FunctionDeclStmt: FUNC ID • '(' ')' $@1 Block
+
+    '('  shift, and go to state 10
+
+
+State 8
+
+    0 $accept: Program $end •
+
+    $default  accept
+
+
+State 9
+
+    2 GlobalStatementList: GlobalStatementList GlobalStatement •
+
+    $default  reduce using rule 2 (GlobalStatementList)
+
+
+State 10
+
+    7 FunctionDeclStmt: FUNC ID '(' • ')' $@1 Block
+
+    ')'  shift, and go to state 11
+
+
+State 11
+
+    7 FunctionDeclStmt: FUNC ID '(' ')' • $@1 Block
+
+    $default  reduce using rule 6 ($@1)
+
+    $@1  go to state 12
+
+
+State 12
+
+    7 FunctionDeclStmt: FUNC ID '(' ')' $@1 • Block
+
+    '{'  shift, and go to state 13
+
+    Block  go to state 14
+
+
+State 13
+
+   50 Block: '{' • $@3 StatementList '}'
+
+    $default  reduce using rule 49 ($@3)
+
+    $@3  go to state 15
+
+
+State 14
+
+    7 FunctionDeclStmt: FUNC ID '(' ')' $@1 Block •
+
+    $default  reduce using rule 7 (FunctionDeclStmt)
+
+
+State 15
+
+   50 Block: '{' $@3 • StatementList '}'
+
+    $default  reduce using rule 8 (StatementList)
+
+    StatementList  go to state 16
+
+
+State 16
+
+    9 StatementList: StatementList • Statement
+   50 Block: '{' $@3 StatementList • '}'
+
+    LET        shift, and go to state 17
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    IF         shift, and go to state 20
+    WHILE      shift, and go to state 21
+    PRINT      shift, and go to state 22
+    PRINTLN    shift, and go to state 23
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 27
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '{'        shift, and go to state 13
+    '}'        shift, and go to state 30
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    Statement       go to state 33
+    VarDeclStmt     go to state 34
+    AssignmentStmt  go to state 35
+    IfStmt          go to state 36
+    WhileStmt       go to state 37
+    PrintStmt       go to state 38
+    PrintlnStmt     go to state 39
+    Block           go to state 40
+    ExpressionStmt  go to state 41
+    Expression      go to state 42
+    OrExpr          go to state 43
+    AndExpr         go to state 44
+    RelExpr         go to state 45
+    AddExpr         go to state 46
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 17
+
+   24 VarDeclStmt: LET • ID '=' Expression ';'
+   25            | LET • ID ':' Type '=' Expression ';'
+   26            | LET • ID ':' Type ';'
+   27            | LET • MUT ID ':' Type '=' Expression ';'
+   28            | LET • MUT ID ':' Type ';'
+   29            | LET • MUT ID '=' Expression ';'
+
+    MUT  shift, and go to state 52
+    ID   shift, and go to state 53
+
+
+State 18
+
+   82 Primary: TRUE •
+
+    $default  reduce using rule 82 (Primary)
+
+
+State 19
+
+   83 Primary: FALSE •
+
+    $default  reduce using rule 83 (Primary)
+
+
+State 20
+
+   37 IfStmt: IF • RelExprJump @2 Block OptElse
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    RelExprJump     go to state 55
+    AddExpr         go to state 56
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 21
+
+   46 WhileStmt: WHILE • Expression Block
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    Expression      go to state 57
+    OrExpr          go to state 43
+    AndExpr         go to state 44
+    RelExpr         go to state 45
+    AddExpr         go to state 46
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 22
+
+   47 PrintStmt: PRINT • Expression ';'
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    Expression      go to state 58
+    OrExpr          go to state 43
+    AndExpr         go to state 44
+    RelExpr         go to state 45
+    AddExpr         go to state 46
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 23
+
+   48 PrintlnStmt: PRINTLN • Expression ';'
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    Expression      go to state 59
+    OrExpr          go to state 43
+    AndExpr         go to state 44
+    RelExpr         go to state 45
+    AddExpr         go to state 46
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 24
+
+   78 Primary: '"' • STRING_LIT '"'
+   79        | '"' • '"'
+
+    '"'         shift, and go to state 60
+    STRING_LIT  shift, and go to state 61
+
+
+State 25
+
+   80 Primary: INT_LIT •
+
+    $default  reduce using rule 80 (Primary)
+
+
+State 26
+
+   81 Primary: FLOAT_LIT •
+
+    $default  reduce using rule 81 (Primary)
+
+
+State 27
+
+   30 AssignmentStmt: ID • '=' Expression ';'
+   31               | ID • ADD_ASSIGN Expression ';'
+   32               | ID • SUB_ASSIGN Expression ';'
+   33               | ID • MUL_ASSIGN Expression ';'
+   34               | ID • DIV_ASSIGN Expression ';'
+   35               | ID • REM_ASSIGN Expression ';'
+   84 Primary: ID •
+   88 ArrayIndexExpr: ID • '[' INT_LIT ']'
+
+    ADD_ASSIGN  shift, and go to state 62
+    SUB_ASSIGN  shift, and go to state 63
+    MUL_ASSIGN  shift, and go to state 64
+    DIV_ASSIGN  shift, and go to state 65
+    REM_ASSIGN  shift, and go to state 66
+    '='         shift, and go to state 67
+    '['         shift, and go to state 68
+
+    $default  reduce using rule 84 (Primary)
+
+
+State 28
+
+   87 Primary: '(' • Expression ')'
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    Expression      go to state 69
+    OrExpr          go to state 43
+    AndExpr         go to state 44
+    RelExpr         go to state 45
+    AddExpr         go to state 46
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 29
+
+   86 Primary: '[' • ExpressionList ']'
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    ExpressionList  go to state 70
+    Expression      go to state 71
+    OrExpr          go to state 43
+    AndExpr         go to state 44
+    RelExpr         go to state 45
+    AddExpr         go to state 46
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 30
+
+   50 Block: '{' $@3 StatementList '}' •
+
+    $default  reduce using rule 50 (Block)
+
+
+State 31
+
+   75 UnaryExpr: '-' • UnaryExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    UnaryExpr       go to state 72
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 32
+
+   76 UnaryExpr: '!' • UnaryExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    UnaryExpr       go to state 73
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 33
+
+    9 StatementList: StatementList Statement •
+
+    $default  reduce using rule 9 (StatementList)
+
+
+State 34
+
+   10 Statement: VarDeclStmt •
+
+    $default  reduce using rule 10 (Statement)
+
+
+State 35
+
+   11 Statement: AssignmentStmt •
+
+    $default  reduce using rule 11 (Statement)
+
+
+State 36
+
+   12 Statement: IfStmt •
+
+    $default  reduce using rule 12 (Statement)
+
+
+State 37
+
+   13 Statement: WhileStmt •
+
+    $default  reduce using rule 13 (Statement)
+
+
+State 38
+
+   14 Statement: PrintStmt •
+
+    $default  reduce using rule 14 (Statement)
+
+
+State 39
+
+   15 Statement: PrintlnStmt •
+
+    $default  reduce using rule 15 (Statement)
+
+
+State 40
+
+   16 Statement: Block •
+
+    $default  reduce using rule 16 (Statement)
+
+
+State 41
+
+   17 Statement: ExpressionStmt •
+
+    $default  reduce using rule 17 (Statement)
+
+
+State 42
+
+   53 ExpressionStmt: Expression • ';'
+
+    ';'  shift, and go to state 74
+
+
+State 43
+
+   54 Expression: OrExpr •
+   55 OrExpr: OrExpr • LOR AndExpr
+
+    LOR  shift, and go to state 75
+
+    $default  reduce using rule 54 (Expression)
+
+
+State 44
+
+   56 OrExpr: AndExpr •
+   57 AndExpr: AndExpr • LAND RelExpr
+
+    LAND  shift, and go to state 76
+
+    $default  reduce using rule 56 (OrExpr)
+
+
+State 45
+
+   58 AndExpr: RelExpr •
+
+    $default  reduce using rule 58 (AndExpr)
+
+
+State 46
+
+   59 RelExpr: AddExpr • '>' AddExpr
+   60        | AddExpr • '<' AddExpr
+   61        | AddExpr • EQL AddExpr
+   62        | AddExpr • NEQ AddExpr
+   63        | AddExpr • LSHIFT AddExpr
+   64        | AddExpr • RSHIFT AddExpr
+   65        | AddExpr •
+   66 AddExpr: AddExpr • '+' MulExpr
+   67        | AddExpr • '-' MulExpr
+
+    EQL     shift, and go to state 77
+    NEQ     shift, and go to state 78
+    RSHIFT  shift, and go to state 79
+    LSHIFT  shift, and go to state 80
+    '>'     shift, and go to state 81
+    '<'     shift, and go to state 82
+    '+'     shift, and go to state 83
+    '-'     shift, and go to state 84
+
+    $default  reduce using rule 65 (RelExpr)
+
+
+State 47
+
+   68 AddExpr: MulExpr •
+   69 MulExpr: MulExpr • '*' UnaryExpr
+   70        | MulExpr • '/' UnaryExpr
+   71        | MulExpr • '%' UnaryExpr
+
+    '*'  shift, and go to state 85
+    '/'  shift, and go to state 86
+    '%'  shift, and go to state 87
+
+    $default  reduce using rule 68 (AddExpr)
+
+
+State 48
+
+   72 MulExpr: AsExpr •
+
+    $default  reduce using rule 72 (MulExpr)
+
+
+State 49
+
+   73 AsExpr: UnaryExpr • AS Type
+   74       | UnaryExpr •
+
+    AS  shift, and go to state 88
+
+    $default  reduce using rule 74 (AsExpr)
+
+
+State 50
+
+   77 UnaryExpr: Primary •
+
+    $default  reduce using rule 77 (UnaryExpr)
+
+
+State 51
+
+   85 Primary: ArrayIndexExpr •
+
+    $default  reduce using rule 85 (Primary)
+
+
+State 52
+
+   27 VarDeclStmt: LET MUT • ID ':' Type '=' Expression ';'
+   28            | LET MUT • ID ':' Type ';'
+   29            | LET MUT • ID '=' Expression ';'
+
+    ID  shift, and go to state 89
+
+
+State 53
+
+   24 VarDeclStmt: LET ID • '=' Expression ';'
+   25            | LET ID • ':' Type '=' Expression ';'
+   26            | LET ID • ':' Type ';'
+
+    '='  shift, and go to state 90
+    ':'  shift, and go to state 91
+
+
+State 54
+
+   84 Primary: ID •
+   88 ArrayIndexExpr: ID • '[' INT_LIT ']'
+
+    '['  shift, and go to state 68
+
+    $default  reduce using rule 84 (Primary)
+
+
+State 55
+
+   37 IfStmt: IF RelExprJump • @2 Block OptElse
+
+    $default  reduce using rule 36 (@2)
+
+    @2  go to state 92
+
+
+State 56
+
+   40 RelExprJump: AddExpr • '>' AddExpr
+   41            | AddExpr • '<' AddExpr
+   42            | AddExpr • EQL AddExpr
+   43            | AddExpr • NEQ AddExpr
+   44            | AddExpr • GEQ AddExpr
+   45            | AddExpr • LEQ AddExpr
+   66 AddExpr: AddExpr • '+' MulExpr
+   67        | AddExpr • '-' MulExpr
+
+    GEQ  shift, and go to state 93
+    LEQ  shift, and go to state 94
+    EQL  shift, and go to state 95
+    NEQ  shift, and go to state 96
+    '>'  shift, and go to state 97
+    '<'  shift, and go to state 98
+    '+'  shift, and go to state 83
+    '-'  shift, and go to state 84
+
+
+State 57
+
+   46 WhileStmt: WHILE Expression • Block
+
+    '{'  shift, and go to state 13
+
+    Block  go to state 99
+
+
+State 58
+
+   47 PrintStmt: PRINT Expression • ';'
+
+    ';'  shift, and go to state 100
+
+
+State 59
+
+   48 PrintlnStmt: PRINTLN Expression • ';'
+
+    ';'  shift, and go to state 101
+
+
+State 60
+
+   79 Primary: '"' '"' •
+
+    $default  reduce using rule 79 (Primary)
+
+
+State 61
+
+   78 Primary: '"' STRING_LIT • '"'
+
+    '"'  shift, and go to state 102
+
+
+State 62
+
+   31 AssignmentStmt: ID ADD_ASSIGN • Expression ';'
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    Expression      go to state 103
+    OrExpr          go to state 43
+    AndExpr         go to state 44
+    RelExpr         go to state 45
+    AddExpr         go to state 46
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 63
+
+   32 AssignmentStmt: ID SUB_ASSIGN • Expression ';'
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    Expression      go to state 104
+    OrExpr          go to state 43
+    AndExpr         go to state 44
+    RelExpr         go to state 45
+    AddExpr         go to state 46
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 64
+
+   33 AssignmentStmt: ID MUL_ASSIGN • Expression ';'
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    Expression      go to state 105
+    OrExpr          go to state 43
+    AndExpr         go to state 44
+    RelExpr         go to state 45
+    AddExpr         go to state 46
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 65
+
+   34 AssignmentStmt: ID DIV_ASSIGN • Expression ';'
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    Expression      go to state 106
+    OrExpr          go to state 43
+    AndExpr         go to state 44
+    RelExpr         go to state 45
+    AddExpr         go to state 46
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 66
+
+   35 AssignmentStmt: ID REM_ASSIGN • Expression ';'
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    Expression      go to state 107
+    OrExpr          go to state 43
+    AndExpr         go to state 44
+    RelExpr         go to state 45
+    AddExpr         go to state 46
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 67
+
+   30 AssignmentStmt: ID '=' • Expression ';'
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    Expression      go to state 108
+    OrExpr          go to state 43
+    AndExpr         go to state 44
+    RelExpr         go to state 45
+    AddExpr         go to state 46
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 68
+
+   88 ArrayIndexExpr: ID '[' • INT_LIT ']'
+
+    INT_LIT  shift, and go to state 109
+
+
+State 69
+
+   87 Primary: '(' Expression • ')'
+
+    ')'  shift, and go to state 110
+
+
+State 70
+
+   52 ExpressionList: ExpressionList • ',' Expression
+   86 Primary: '[' ExpressionList • ']'
+
+    ']'  shift, and go to state 111
+    ','  shift, and go to state 112
+
+
+State 71
+
+   51 ExpressionList: Expression •
+
+    $default  reduce using rule 51 (ExpressionList)
+
+
+State 72
+
+   75 UnaryExpr: '-' UnaryExpr •
+
+    $default  reduce using rule 75 (UnaryExpr)
+
+
+State 73
+
+   76 UnaryExpr: '!' UnaryExpr •
+
+    $default  reduce using rule 76 (UnaryExpr)
+
+
+State 74
+
+   53 ExpressionStmt: Expression ';' •
+
+    $default  reduce using rule 53 (ExpressionStmt)
+
+
+State 75
+
+   55 OrExpr: OrExpr LOR • AndExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    AndExpr         go to state 113
+    RelExpr         go to state 45
+    AddExpr         go to state 46
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 76
+
+   57 AndExpr: AndExpr LAND • RelExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    RelExpr         go to state 114
+    AddExpr         go to state 46
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 77
+
+   61 RelExpr: AddExpr EQL • AddExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    AddExpr         go to state 115
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 78
+
+   62 RelExpr: AddExpr NEQ • AddExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    AddExpr         go to state 116
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 79
+
+   64 RelExpr: AddExpr RSHIFT • AddExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    AddExpr         go to state 117
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 80
+
+   63 RelExpr: AddExpr LSHIFT • AddExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    AddExpr         go to state 118
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 81
+
+   59 RelExpr: AddExpr '>' • AddExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    AddExpr         go to state 119
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 82
+
+   60 RelExpr: AddExpr '<' • AddExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    AddExpr         go to state 120
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 83
+
+   66 AddExpr: AddExpr '+' • MulExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    MulExpr         go to state 121
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 84
+
+   67 AddExpr: AddExpr '-' • MulExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    MulExpr         go to state 122
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 85
+
+   69 MulExpr: MulExpr '*' • UnaryExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    UnaryExpr       go to state 123
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 86
+
+   70 MulExpr: MulExpr '/' • UnaryExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    UnaryExpr       go to state 124
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 87
+
+   71 MulExpr: MulExpr '%' • UnaryExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    UnaryExpr       go to state 125
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 88
+
+   73 AsExpr: UnaryExpr AS • Type
+
+    INT    shift, and go to state 126
+    FLOAT  shift, and go to state 127
+    BOOL   shift, and go to state 128
+    STR    shift, and go to state 129
+    '&'    shift, and go to state 130
+    '['    shift, and go to state 131
+
+    Type  go to state 132
+
+
+State 89
+
+   27 VarDeclStmt: LET MUT ID • ':' Type '=' Expression ';'
+   28            | LET MUT ID • ':' Type ';'
+   29            | LET MUT ID • '=' Expression ';'
+
+    '='  shift, and go to state 133
+    ':'  shift, and go to state 134
+
+
+State 90
+
+   24 VarDeclStmt: LET ID '=' • Expression ';'
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    Expression      go to state 135
+    OrExpr          go to state 43
+    AndExpr         go to state 44
+    RelExpr         go to state 45
+    AddExpr         go to state 46
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 91
+
+   25 VarDeclStmt: LET ID ':' • Type '=' Expression ';'
+   26            | LET ID ':' • Type ';'
+
+    INT    shift, and go to state 126
+    FLOAT  shift, and go to state 127
+    BOOL   shift, and go to state 128
+    STR    shift, and go to state 129
+    '&'    shift, and go to state 130
+    '['    shift, and go to state 131
+
+    Type  go to state 136
+
+
+State 92
+
+   37 IfStmt: IF RelExprJump @2 • Block OptElse
+
+    '{'  shift, and go to state 13
+
+    Block  go to state 137
+
+
+State 93
+
+   44 RelExprJump: AddExpr GEQ • AddExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    AddExpr         go to state 138
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 94
+
+   45 RelExprJump: AddExpr LEQ • AddExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    AddExpr         go to state 139
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 95
+
+   42 RelExprJump: AddExpr EQL • AddExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    AddExpr         go to state 140
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 96
+
+   43 RelExprJump: AddExpr NEQ • AddExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    AddExpr         go to state 141
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 97
+
+   40 RelExprJump: AddExpr '>' • AddExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    AddExpr         go to state 142
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 98
+
+   41 RelExprJump: AddExpr '<' • AddExpr
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    AddExpr         go to state 143
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 99
+
+   46 WhileStmt: WHILE Expression Block •
+
+    $default  reduce using rule 46 (WhileStmt)
+
+
+State 100
+
+   47 PrintStmt: PRINT Expression ';' •
+
+    $default  reduce using rule 47 (PrintStmt)
+
+
+State 101
+
+   48 PrintlnStmt: PRINTLN Expression ';' •
+
+    $default  reduce using rule 48 (PrintlnStmt)
+
+
+State 102
+
+   78 Primary: '"' STRING_LIT '"' •
+
+    $default  reduce using rule 78 (Primary)
+
+
+State 103
+
+   31 AssignmentStmt: ID ADD_ASSIGN Expression • ';'
+
+    ';'  shift, and go to state 144
+
+
+State 104
+
+   32 AssignmentStmt: ID SUB_ASSIGN Expression • ';'
+
+    ';'  shift, and go to state 145
+
+
+State 105
+
+   33 AssignmentStmt: ID MUL_ASSIGN Expression • ';'
+
+    ';'  shift, and go to state 146
+
+
+State 106
+
+   34 AssignmentStmt: ID DIV_ASSIGN Expression • ';'
+
+    ';'  shift, and go to state 147
+
+
+State 107
+
+   35 AssignmentStmt: ID REM_ASSIGN Expression • ';'
+
+    ';'  shift, and go to state 148
+
+
+State 108
+
+   30 AssignmentStmt: ID '=' Expression • ';'
+
+    ';'  shift, and go to state 149
+
+
+State 109
+
+   88 ArrayIndexExpr: ID '[' INT_LIT • ']'
+
+    ']'  shift, and go to state 150
+
+
+State 110
+
+   87 Primary: '(' Expression ')' •
+
+    $default  reduce using rule 87 (Primary)
+
+
+State 111
+
+   86 Primary: '[' ExpressionList ']' •
+
+    $default  reduce using rule 86 (Primary)
+
+
+State 112
+
+   52 ExpressionList: ExpressionList ',' • Expression
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    Expression      go to state 151
+    OrExpr          go to state 43
+    AndExpr         go to state 44
+    RelExpr         go to state 45
+    AddExpr         go to state 46
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 113
+
+   55 OrExpr: OrExpr LOR AndExpr •
+   57 AndExpr: AndExpr • LAND RelExpr
+
+    LAND  shift, and go to state 76
+
+    $default  reduce using rule 55 (OrExpr)
+
+
+State 114
+
+   57 AndExpr: AndExpr LAND RelExpr •
+
+    $default  reduce using rule 57 (AndExpr)
+
+
+State 115
+
+   61 RelExpr: AddExpr EQL AddExpr •
+   66 AddExpr: AddExpr • '+' MulExpr
+   67        | AddExpr • '-' MulExpr
+
+    '+'  shift, and go to state 83
+    '-'  shift, and go to state 84
+
+    $default  reduce using rule 61 (RelExpr)
+
+
+State 116
+
+   62 RelExpr: AddExpr NEQ AddExpr •
+   66 AddExpr: AddExpr • '+' MulExpr
+   67        | AddExpr • '-' MulExpr
+
+    '+'  shift, and go to state 83
+    '-'  shift, and go to state 84
+
+    $default  reduce using rule 62 (RelExpr)
+
+
+State 117
+
+   64 RelExpr: AddExpr RSHIFT AddExpr •
+   66 AddExpr: AddExpr • '+' MulExpr
+   67        | AddExpr • '-' MulExpr
+
+    '+'  shift, and go to state 83
+    '-'  shift, and go to state 84
+
+    $default  reduce using rule 64 (RelExpr)
+
+
+State 118
+
+   63 RelExpr: AddExpr LSHIFT AddExpr •
+   66 AddExpr: AddExpr • '+' MulExpr
+   67        | AddExpr • '-' MulExpr
+
+    '+'  shift, and go to state 83
+    '-'  shift, and go to state 84
+
+    $default  reduce using rule 63 (RelExpr)
+
+
+State 119
+
+   59 RelExpr: AddExpr '>' AddExpr •
+   66 AddExpr: AddExpr • '+' MulExpr
+   67        | AddExpr • '-' MulExpr
+
+    '+'  shift, and go to state 83
+    '-'  shift, and go to state 84
+
+    $default  reduce using rule 59 (RelExpr)
+
+
+State 120
+
+   60 RelExpr: AddExpr '<' AddExpr •
+   66 AddExpr: AddExpr • '+' MulExpr
+   67        | AddExpr • '-' MulExpr
+
+    '+'  shift, and go to state 83
+    '-'  shift, and go to state 84
+
+    $default  reduce using rule 60 (RelExpr)
+
+
+State 121
+
+   66 AddExpr: AddExpr '+' MulExpr •
+   69 MulExpr: MulExpr • '*' UnaryExpr
+   70        | MulExpr • '/' UnaryExpr
+   71        | MulExpr • '%' UnaryExpr
+
+    '*'  shift, and go to state 85
+    '/'  shift, and go to state 86
+    '%'  shift, and go to state 87
+
+    $default  reduce using rule 66 (AddExpr)
+
+
+State 122
+
+   67 AddExpr: AddExpr '-' MulExpr •
+   69 MulExpr: MulExpr • '*' UnaryExpr
+   70        | MulExpr • '/' UnaryExpr
+   71        | MulExpr • '%' UnaryExpr
+
+    '*'  shift, and go to state 85
+    '/'  shift, and go to state 86
+    '%'  shift, and go to state 87
+
+    $default  reduce using rule 67 (AddExpr)
+
+
+State 123
+
+   69 MulExpr: MulExpr '*' UnaryExpr •
+
+    $default  reduce using rule 69 (MulExpr)
+
+
+State 124
+
+   70 MulExpr: MulExpr '/' UnaryExpr •
+
+    $default  reduce using rule 70 (MulExpr)
+
+
+State 125
+
+   71 MulExpr: MulExpr '%' UnaryExpr •
+
+    $default  reduce using rule 71 (MulExpr)
+
+
+State 126
+
+   18 Type: INT •
+
+    $default  reduce using rule 18 (Type)
+
+
+State 127
+
+   19 Type: FLOAT •
+
+    $default  reduce using rule 19 (Type)
+
+
+State 128
+
+   22 Type: BOOL •
+
+    $default  reduce using rule 22 (Type)
+
+
+State 129
+
+   20 Type: STR •
+
+    $default  reduce using rule 20 (Type)
+
+
+State 130
+
+   21 Type: '&' • STR
+
+    STR  shift, and go to state 152
+
+
+State 131
+
+   23 Type: '[' • Type ';' INT_LIT ']'
+
+    INT    shift, and go to state 126
+    FLOAT  shift, and go to state 127
+    BOOL   shift, and go to state 128
+    STR    shift, and go to state 129
+    '&'    shift, and go to state 130
+    '['    shift, and go to state 131
+
+    Type  go to state 153
+
+
+State 132
+
+   73 AsExpr: UnaryExpr AS Type •
+
+    $default  reduce using rule 73 (AsExpr)
+
+
+State 133
+
+   29 VarDeclStmt: LET MUT ID '=' • Expression ';'
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    Expression      go to state 154
+    OrExpr          go to state 43
+    AndExpr         go to state 44
+    RelExpr         go to state 45
+    AddExpr         go to state 46
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 134
+
+   27 VarDeclStmt: LET MUT ID ':' • Type '=' Expression ';'
+   28            | LET MUT ID ':' • Type ';'
+
+    INT    shift, and go to state 126
+    FLOAT  shift, and go to state 127
+    BOOL   shift, and go to state 128
+    STR    shift, and go to state 129
+    '&'    shift, and go to state 130
+    '['    shift, and go to state 131
+
+    Type  go to state 155
+
+
+State 135
+
+   24 VarDeclStmt: LET ID '=' Expression • ';'
+
+    ';'  shift, and go to state 156
+
+
+State 136
+
+   25 VarDeclStmt: LET ID ':' Type • '=' Expression ';'
+   26            | LET ID ':' Type • ';'
+
+    '='  shift, and go to state 157
+    ';'  shift, and go to state 158
+
+
+State 137
+
+   37 IfStmt: IF RelExprJump @2 Block • OptElse
+
+    ELSE  shift, and go to state 159
+
+    $default  reduce using rule 39 (OptElse)
+
+    OptElse  go to state 160
+
+
+State 138
+
+   44 RelExprJump: AddExpr GEQ AddExpr •
+   66 AddExpr: AddExpr • '+' MulExpr
+   67        | AddExpr • '-' MulExpr
+
+    '+'  shift, and go to state 83
+    '-'  shift, and go to state 84
+
+    $default  reduce using rule 44 (RelExprJump)
+
+
+State 139
+
+   45 RelExprJump: AddExpr LEQ AddExpr •
+   66 AddExpr: AddExpr • '+' MulExpr
+   67        | AddExpr • '-' MulExpr
+
+    '+'  shift, and go to state 83
+    '-'  shift, and go to state 84
+
+    $default  reduce using rule 45 (RelExprJump)
+
+
+State 140
+
+   42 RelExprJump: AddExpr EQL AddExpr •
+   66 AddExpr: AddExpr • '+' MulExpr
+   67        | AddExpr • '-' MulExpr
+
+    '+'  shift, and go to state 83
+    '-'  shift, and go to state 84
+
+    $default  reduce using rule 42 (RelExprJump)
+
+
+State 141
+
+   43 RelExprJump: AddExpr NEQ AddExpr •
+   66 AddExpr: AddExpr • '+' MulExpr
+   67        | AddExpr • '-' MulExpr
+
+    '+'  shift, and go to state 83
+    '-'  shift, and go to state 84
+
+    $default  reduce using rule 43 (RelExprJump)
+
+
+State 142
+
+   40 RelExprJump: AddExpr '>' AddExpr •
+   66 AddExpr: AddExpr • '+' MulExpr
+   67        | AddExpr • '-' MulExpr
+
+    '+'  shift, and go to state 83
+    '-'  shift, and go to state 84
+
+    $default  reduce using rule 40 (RelExprJump)
+
+
+State 143
+
+   41 RelExprJump: AddExpr '<' AddExpr •
+   66 AddExpr: AddExpr • '+' MulExpr
+   67        | AddExpr • '-' MulExpr
+
+    '+'  shift, and go to state 83
+    '-'  shift, and go to state 84
+
+    $default  reduce using rule 41 (RelExprJump)
+
+
+State 144
+
+   31 AssignmentStmt: ID ADD_ASSIGN Expression ';' •
+
+    $default  reduce using rule 31 (AssignmentStmt)
+
+
+State 145
+
+   32 AssignmentStmt: ID SUB_ASSIGN Expression ';' •
+
+    $default  reduce using rule 32 (AssignmentStmt)
+
+
+State 146
+
+   33 AssignmentStmt: ID MUL_ASSIGN Expression ';' •
+
+    $default  reduce using rule 33 (AssignmentStmt)
+
+
+State 147
+
+   34 AssignmentStmt: ID DIV_ASSIGN Expression ';' •
+
+    $default  reduce using rule 34 (AssignmentStmt)
+
+
+State 148
+
+   35 AssignmentStmt: ID REM_ASSIGN Expression ';' •
+
+    $default  reduce using rule 35 (AssignmentStmt)
+
+
+State 149
+
+   30 AssignmentStmt: ID '=' Expression ';' •
+
+    $default  reduce using rule 30 (AssignmentStmt)
+
+
+State 150
+
+   88 ArrayIndexExpr: ID '[' INT_LIT ']' •
+
+    $default  reduce using rule 88 (ArrayIndexExpr)
+
+
+State 151
+
+   52 ExpressionList: ExpressionList ',' Expression •
+
+    $default  reduce using rule 52 (ExpressionList)
+
+
+State 152
+
+   21 Type: '&' STR •
+
+    $default  reduce using rule 21 (Type)
+
+
+State 153
+
+   23 Type: '[' Type • ';' INT_LIT ']'
+
+    ';'  shift, and go to state 161
+
+
+State 154
+
+   29 VarDeclStmt: LET MUT ID '=' Expression • ';'
+
+    ';'  shift, and go to state 162
+
+
+State 155
+
+   27 VarDeclStmt: LET MUT ID ':' Type • '=' Expression ';'
+   28            | LET MUT ID ':' Type • ';'
+
+    '='  shift, and go to state 163
+    ';'  shift, and go to state 164
+
+
+State 156
+
+   24 VarDeclStmt: LET ID '=' Expression ';' •
+
+    $default  reduce using rule 24 (VarDeclStmt)
+
+
+State 157
+
+   25 VarDeclStmt: LET ID ':' Type '=' • Expression ';'
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    Expression      go to state 165
+    OrExpr          go to state 43
+    AndExpr         go to state 44
+    RelExpr         go to state 45
+    AddExpr         go to state 46
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 158
+
+   26 VarDeclStmt: LET ID ':' Type ';' •
+
+    $default  reduce using rule 26 (VarDeclStmt)
+
+
+State 159
+
+   38 OptElse: ELSE • Block
+
+    '{'  shift, and go to state 13
+
+    Block  go to state 166
+
+
+State 160
+
+   37 IfStmt: IF RelExprJump @2 Block OptElse •
+
+    $default  reduce using rule 37 (IfStmt)
+
+
+State 161
+
+   23 Type: '[' Type ';' • INT_LIT ']'
+
+    INT_LIT  shift, and go to state 167
+
+
+State 162
+
+   29 VarDeclStmt: LET MUT ID '=' Expression ';' •
+
+    $default  reduce using rule 29 (VarDeclStmt)
+
+
+State 163
+
+   27 VarDeclStmt: LET MUT ID ':' Type '=' • Expression ';'
+
+    TRUE       shift, and go to state 18
+    FALSE      shift, and go to state 19
+    '"'        shift, and go to state 24
+    INT_LIT    shift, and go to state 25
+    FLOAT_LIT  shift, and go to state 26
+    ID         shift, and go to state 54
+    '('        shift, and go to state 28
+    '['        shift, and go to state 29
+    '-'        shift, and go to state 31
+    '!'        shift, and go to state 32
+
+    Expression      go to state 168
+    OrExpr          go to state 43
+    AndExpr         go to state 44
+    RelExpr         go to state 45
+    AddExpr         go to state 46
+    MulExpr         go to state 47
+    AsExpr          go to state 48
+    UnaryExpr       go to state 49
+    Primary         go to state 50
+    ArrayIndexExpr  go to state 51
+
+
+State 164
+
+   28 VarDeclStmt: LET MUT ID ':' Type ';' •
+
+    $default  reduce using rule 28 (VarDeclStmt)
+
+
+State 165
+
+   25 VarDeclStmt: LET ID ':' Type '=' Expression • ';'
+
+    ';'  shift, and go to state 169
+
+
+State 166
+
+   38 OptElse: ELSE Block •
+
+    $default  reduce using rule 38 (OptElse)
+
+
+State 167
+
+   23 Type: '[' Type ';' INT_LIT • ']'
+
+    ']'  shift, and go to state 170
+
+
+State 168
+
+   27 VarDeclStmt: LET MUT ID ':' Type '=' Expression • ';'
+
+    ';'  shift, and go to state 171
+
+
+State 169
+
+   25 VarDeclStmt: LET ID ':' Type '=' Expression ';' •
+
+    $default  reduce using rule 25 (VarDeclStmt)
+
+
+State 170
+
+   23 Type: '[' Type ';' INT_LIT ']' •
+
+    $default  reduce using rule 23 (Type)
+
+
+State 171
+
+   27 VarDeclStmt: LET MUT ID ':' Type '=' Expression ';' •
+
+    $default  reduce using rule 27 (VarDeclStmt)
